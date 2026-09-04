@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHRONOS-X // Quantum Time Machine</title>
+  <meta name="description" content="Navigate across millennia with the interactive Quantum Time Machine web portal. Experience warp hyperspace, historical dossiers, and timeline paradox simulations.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Outfit:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="temporal-body">
+  <!-- Scanline & CRT Effect Overlay -->
+  <div class="crt-overlay"></div>
+  <div class="vignette-overlay"></div>
+
+  <!-- Background Canvas for Stars / Warp Tunnel -->
+  <canvas id="warp-canvas" class="warp-canvas"></canvas>
+
+  <!-- Main HUD Container -->
+  <div class="hud-container" id="hud-container">
+    
+    <!-- Top Header / Machine Status Bar -->
+    <header class="temporal-header">
+      <div class="logo-group">
+        <div class="flux-indicator" id="flux-status-dot"></div>
+        <div class="brand-text">
+          <h1 class="machine-title">CHRONOS-X <span class="version-tag">MK-VII</span></h1>
+          <p class="machine-sub">QUANTUM TEMPORAL DISPLACEMENT VEHICLE</p>
+        </div>
+      </div>
+
+      <div class="header-telemetry">
+        <div class="telemetry-item">
+          <span class="telemetry-label">CHRONO COIL</span>
+          <span class="telemetry-value" id="coil-status">1.21 GW [ONLINE]</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">PARADOX SHIELD</span>
+          <span class="telemetry-value text-emerald" id="shield-status">98.4% STABLE</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">TEMPORAL TACHYON</span>
+          <span class="telemetry-value text-amber" id="tachyon-level">88.0 MPH READY</span>
+        </div>
+        <button id="btn-sound-toggle" class="hud-btn-mini" title="Toggle Sound System">
+          <span class="sound-icon">🔊</span> <span id="sound-label">AUDIO: ON</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Console Grid -->
+    <main class="console-grid">
+      
+      <!-- Left Column: Chrono Circuits & Controls -->
+      <section class="panel-section console-left">
+        
+        <!-- Time Circuits Display -->
+        <div class="glass-card circuits-card">
+          <div class="card-header">
+            <span class="card-title">TEMPORAL DISPLACEMENT CIRCUITS</span>
+            <span class="circuit-id">CIRCUIT BOARD REV 8.5</span>
+          </div>
+
+          <!-- Destination Time Display (RED) -->
+          <div class="circuit-box circuit-destination">
+            <div class="circuit-header">
+              <span class="circuit-label">DESTINATION TIME</span>
+              <span class="circuit-status" id="dest-status-badge">STANDBY</span>
+            </div>
+            <div class="circuit-readout">
+              <div class="digit-segment">
+                <span class="digit-title">MONTH</span>
+                <span class="digit-val" id="dest-month">OCT</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">DAY</span>
+                <span class="digit-val" id="dest-day">26</span>
+              </div>
+              <div class="digit-segment wide">
+                <span class="digit-title">YEAR</span>
+                <span class="digit-val" id="dest-year">1985</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">HOUR</span>
+                <span class="digit-val" id="dest-hour">01</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">MIN</span>
+                <span class="digit-val" id="dest-min">21</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">ERA</span>
+                <span class="digit-val" id="dest-era">AD</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Present Time Display (GREEN) -->
+          <div class="circuit-box circuit-present">
+            <div class="circuit-header">
+              <span class="circuit-label">PRESENT TIME</span>
+              <span class="circuit-status text-green">SYNCED REAL-TIME</span>
+            </div>
+            <div class="circuit-readout">
+              <div class="digit-segment">
+                <span class="digit-title">MONTH</span>
+                <span class="digit-val" id="pres-month">SEP</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">DAY</span>
+                <span class="digit-val" id="pres-day">04</span>
+              </div>
+              <div class="digit-segment wide">
+                <span class="digit-title">YEAR</span>
+                <span class="digit-val" id="pres-year">2026</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">HOUR</span>
+                <span class="digit-val" id="pres-hour">12</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">MIN</span>
+                <span class="digit-val" id="pres-min">00</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">ERA</span>
+                <span class="digit-val" id="pres-era">AD</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Last Time Departed Display (AMBER) -->
+          <div class="circuit-box circuit-departed">
+            <div class="circuit-header">
+              <span class="circuit-label">LAST TIME DEPARTED</span>
+              <span class="circuit-status text-amber">RECORDED</span>
+            </div>
+            <div class="circuit-readout">
+              <div class="digit-segment">
+                <span class="digit-title">MONTH</span>
+                <span class="digit-val" id="dep-month">NOV</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">DAY</span>
+                <span class="digit-val" id="dep-day">05</span>
+              </div>
+              <div class="digit-segment wide">
+                <span class="digit-title">YEAR</span>
+                <span class="digit-val" id="dep-year">1955</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">HOUR</span>
+                <span class="digit-val" id="dep-hour">06</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">MIN</span>
+                <span class="digit-val" id="dep-min">00</span>
+              </div>
+              <div class="digit-segment">
+                <span class="digit-title">ERA</span>
+                <span class="digit-val" id="dep-era">AD</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Target Input & Quick Preset Grid -->
+        <div class="glass-card controls-card">
+          <div class="card-header">
+            <span class="card-title">TEMPORAL COORDINATES & JUMP PRESETS</span>
+          </div>
+
+          <!-- Quick Preset Buttons -->
+          <div class="presets-container">
+            <span class="preset-label">FEATURED TIMELINE EPOCHS:</span>
+            <div class="preset-grid" id="preset-grid">
+              <!-- Dynamically populated by JS -->
+            </div>
+          </div>
+
+          <!-- Custom Temporal Coordinates Input -->
+          <div class="custom-coord-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="custom-year">Target Year</label>
+                <input type="number" id="custom-year" placeholder="e.g. 1985 or -2500" value="1985">
+              </div>
+              <div class="form-group">
+                <label for="custom-month">Month</label>
+                <select id="custom-month">
+                  <option value="0">JAN</option>
+                  <option value="1">FEB</option>
+                  <option value="2">MAR</option>
+                  <option value="3">APR</option>
+                  <option value="4">MAY</option>
+                  <option value="5">JUN</option>
+                  <option value="6">JUL</option>
+                  <option value="7">AUG</option>
+                  <option value="8">SEP</option>
+                  <option value="9" selected>OCT</option>
+                  <option value="10">NOV</option>
+                  <option value="11">DEC</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="custom-day">Day</label>
+                <input type="number" id="custom-day" min="1" max="31" value="26">
+              </div>
+              <div class="form-group">
+                <label for="custom-era">Epoch</label>
+                <select id="custom-era">
+                  <option value="AD" selected>CE / AD</option>
+                  <option value="BC">BCE / BC</option>
+                </select>
+              </div>
+            </div>
+            
+            <button id="btn-set-custom" class="hud-btn hud-btn-secondary">
+              ⚡ CALIBRATE CHRONO TARGET
+            </button>
+          </div>
+
+          <!-- Warp Activation Button -->
+          <div class="warp-trigger-area">
+            <div class="flux-capacitor-box">
+              <div class="flux-capacitor" id="flux-capacitor">
+                <div class="flux-core"></div>
+                <div class="flux-arm flux-arm-1"></div>
+                <div class="flux-arm flux-arm-2"></div>
+                <div class="flux-arm flux-arm-3"></div>
+              </div>
+              <div class="flux-info">
+                <span class="flux-text">FLUX CAPACITOR: <strong class="text-cyan">PULSING</strong></span>
+                <span class="speed-text" id="tachyon-speed-readout">0.0 MPH</span>
+              </div>
+            </div>
+
+            <button id="btn-engage-warp" class="warp-btn" title="Initiate Quantum Temporal Jump">
+              <span class="warp-btn-glow"></span>
+              <span class="warp-btn-content">
+                <span class="warp-icon">🌀</span>
+                <span class="warp-main-text">ENGAGE TIME DISPLACEMENT</span>
+                <span class="warp-sub-text">WARP VELOCITY: 88.0 MPH</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Era Dossier, Paradox Simulator, and Traveler Journal -->
+      <section class="panel-section console-right">
+        
+        <!-- Navigation Tabs for Right Panel -->
+        <div class="tab-navigation">
+          <button class="tab-btn active" data-tab="tab-dossier" id="tab-btn-dossier">
+            📜 ERA DOSSIER
+          </button>
+          <button class="tab-btn" data-tab="tab-paradox" id="tab-btn-paradox">
+            ⚠️ PARADOX ENGINE
+          </button>
+          <button class="tab-btn" data-tab="tab-journal" id="tab-btn-journal">
+            🧭 CHRONO JOURNAL (<span id="journal-count">0</span>)
+          </button>
+        </div>
+
+        <!-- Tab 1: Era Dossier -->
+        <div class="tab-content active glass-card" id="tab-dossier">
+          <div class="dossier-banner" id="dossier-banner">
+            <div class="dossier-era-badge" id="dossier-badge">EPOCH: 1985 AD</div>
+            <h2 class="dossier-title" id="dossier-title">The Neon 80s & Microcomputer Dawn</h2>
+            <p class="dossier-tagline" id="dossier-tagline">Birth of personal computing, synth-pop, and the DeLorean dream.</p>
+          </div>
+
+          <div class="dossier-metrics-grid">
+            <div class="metric-card">
+              <span class="metric-icon">🌡️</span>
+              <div class="metric-data">
+                <span class="metric-title">CLIMATE / ATMOSPHERE</span>
+                <span class="metric-val" id="dossier-climate">Temperate (350 ppm CO2)</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-icon">🌐</span>
+              <div class="metric-data">
+                <span class="metric-title">GLOBAL POPULATION</span>
+                <span class="metric-val" id="dossier-population">~4.85 Billion</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-icon">⚡</span>
+              <div class="metric-data">
+                <span class="metric-title">TECH LEVEL</span>
+                <span class="metric-val" id="dossier-tech">Analog-Digital Transition</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-icon">⚠️</span>
+              <div class="metric-data">
+                <span class="metric-title">PARADOX HAZARD</span>
+                <span class="metric-val text-amber" id="dossier-hazard">MODERATE (Level 3)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Era Story & Historical Milestones -->
+          <div class="dossier-details">
+            <h3 class="section-heading">HISTORICAL INTELLIGENCE BRIEF</h3>
+            <p class="dossier-desc" id="dossier-desc">
+              You have arrived in the mid-1980s. The airwaves are buzzing with FM synthesizers, CRT television sets flicker with MTV broadcasts, and the first wave of portable computing is taking flight.
+            </p>
+
+            <h3 class="section-heading">INTERACTIVE TIMELINE ARTIFACTS</h3>
+            <div class="artifacts-row" id="dossier-artifacts">
+              <!-- Dynamically populated -->
+            </div>
+
+            <div class="dossier-actions">
+              <button id="btn-log-visit" class="hud-btn hud-btn-emerald">
+                📝 STAMP PASSPORT & LOG VISIT
+              </button>
+              <button id="btn-test-paradox" class="hud-btn hud-btn-amber">
+                ⚡ SIMULATE PARADOX IN THIS ERA
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Paradox Simulator -->
+        <div class="tab-content glass-card" id="tab-paradox">
+          <div class="card-header">
+            <span class="card-title">BUTTERFLY EFFECT & TEMPORAL INTEGRITY SIMULATOR</span>
+            <span class="circuit-id">CHAOS THEORY V4</span>
+          </div>
+
+          <p class="paradox-intro">
+            Test what happens if you alter historical variables. Every microscopic intervention ripples through quantum probabilities to reshape future centuries.
+          </p>
+
+          <div class="paradox-interactive-box">
+            <div class="form-group">
+              <label for="paradox-scenario-select">CHOOSE A TEMPORAL INTERVENTION:</label>
+              <select id="paradox-scenario-select" class="hud-select">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <button id="btn-run-simulation" class="hud-btn hud-btn-primary full-width">
+              ⚡ CALCULATE TIMELINE DIVERGENCE
+            </button>
+          </div>
+
+          <!-- Simulation Results Readout -->
+          <div class="paradox-results-box" id="paradox-results">
+            <div class="divergence-meter-wrap">
+              <div class="divergence-header">
+                <span>TIMELINE DIVERGENCE PROBABILITY:</span>
+                <span class="divergence-score" id="divergence-score">0.0%</span>
+              </div>
+              <div class="divergence-bar-bg">
+                <div class="divergence-bar-fill" id="divergence-bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="ripple-cascade-box" id="ripple-cascade">
+              <h4 class="cascade-title">QUANTUM RIPPLE CASCADE:</h4>
+              <ul class="cascade-list" id="cascade-list">
+                <li class="cascade-item neutral">Select a scenario and execute simulation to map alternate history branches.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Traveler Journal & Timeline Passport -->
+        <div class="tab-content glass-card" id="tab-journal">
+          <div class="card-header">
+            <span class="card-title">CHRONO-EXPEDITION JOURNAL & PASSPORT</span>
+            <button id="btn-clear-journal" class="hud-btn-mini text-red" title="Clear all logs">CLEAR LOGS</button>
+          </div>
+
+          <div class="journal-stats-banner">
+            <div class="stat-pill">
+              <span class="stat-num" id="stat-total-jumps">0</span>
+              <span class="stat-desc">TOTAL JUMPS</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num" id="stat-eras-visited">0</span>
+              <span class="stat-desc">ERAS LOGGED</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num text-cyan" id="stat-oldest-era">-</span>
+              <span class="stat-desc">FURTHEST JUMP</span>
+            </div>
+          </div>
+
+          <!-- New Log Note Form -->
+          <div class="quick-note-box">
+            <input type="text" id="traveler-note-input" placeholder="Record traveler notes for this epoch..." maxlength="140">
+            <button id="btn-save-note" class="hud-btn hud-btn-secondary">RECORD LOG</button>
+          </div>
+
+          <!-- Passport Stamp Collection & Log Entries -->
+          <div class="journal-log-list" id="journal-log-list">
+            <div class="empty-journal-notice">
+              <span class="empty-icon">🧭</span>
+              <p>No temporal jumps recorded yet. Calibrate coordinates and engage the warp drive to collect stamps and logs!</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <footer class="temporal-footer">
+      <div class="footer-left">
+        <span class="status-indicator live-pulse"></span>
+        <span class="footer-status-text">TEMPORAL FLUX: LOCKED & COHERENT</span>
+      </div>
+      <div class="footer-center">
+        <span>PRESS <kbd>SPACE</kbd> TO ENGAGE WARP &bull; <kbd>1-7</kbd> FOR QUICK JUMPS</span>
+      </div>
+      <div class="footer-right">
+        <span>QUANTUM CHRONO SYSTEM MK-VII &copy; 2026</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Warp Hyperspace Fullscreen Overlay -->
+  <div class="warp-fullscreen-overlay" id="warp-overlay">
+    <div class="warp-content-center">
+      <div class="temporal-vortex-ring"></div>
+      <div class="warp-speedometer">
+        <span class="warp-speed-num" id="overlay-speed-num">0</span>
+        <span class="warp-speed-unit">MPH</span>
+      </div>
+      <div class="warp-status-text" id="overlay-warp-text">INITIATING QUANTUM DISPLACEMENT...</div>
+      <div class="warp-target-text" id="overlay-target-text">TARGET: 1985 AD</div>
+      <div class="warp-progress-bar">
+        <div class="warp-progress-fill" id="overlay-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Relic Modal -->
+  <div class="relic-modal" id="relic-modal">
+    <div class="relic-modal-card glass-card">
+      <div class="relic-modal-header">
+        <h3 class="relic-modal-title" id="relic-title">Artifact Title</h3>
+        <button class="modal-close-btn" id="btn-close-relic">&times;</button>
+      </div>
+      <div class="relic-modal-body">
+        <div class="relic-icon-huge" id="relic-icon">🔮</div>
+        <p class="relic-full-desc" id="relic-desc">Detailed lore description...</p>
+        <div class="relic-meta-box">
+          <div><strong>Temporal Origin:</strong> <span id="relic-origin">1985 AD</span></div>
+          <div><strong>Chronal Significance:</strong> <span id="relic-significance">Key Artifact</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/erasData.js"></script>
+  <script src="js/warpEngine.js"></script>
+  <script src="js/paradoxEngine.js"></script>
+  <script src="js/journal.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

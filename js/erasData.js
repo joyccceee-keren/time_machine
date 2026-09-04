@@ -1,6 +1,6 @@
 /**
  * CHRONOS-X QUANTUM TIME MACHINE
- * Master Temporal Destinations & Era Database
+ * Comprehensive Master Temporal Destinations & Era Database
  */
 
 const ERAS_DATA = [
@@ -127,6 +127,56 @@ const ERAS_DATA = [
     ]
   },
   {
+    id: "rome",
+    name: "Imperial Roman Forum",
+    shortName: "44 BC Rome",
+    badge: "EPOCH: 44 BCE",
+    tagline: "Marble basilicas, legionary banners, and the Ides of March.",
+    year: -44,
+    displayYear: "44",
+    month: 2, // March
+    day: 15,
+    era: "BC",
+    climate: "Mediterranean Sunny",
+    population: "~1.0 Million (Rome)",
+    tech: "Roman Aqueduct & Concrete Engineering",
+    hazard: "HIGH (Level 4)",
+    description: "The Roman Republic stands on the precipice of empire. Julius Caesar enters the Curia of Pompey as senators conspire in the shadows. Chariot wheels rattle along the stone-paved Via Appia.",
+    colorTheme: "#e63946",
+    particleTheme: "crimson-banner",
+    artifacts: [
+      {
+        id: "laurel-crown",
+        icon: "🌿",
+        name: "Gilded Laurel Corona",
+        desc: "Handcrafted golden laurel wreath signifying imperium and triumph awarded to Roman generals.",
+        origin: "44 BCE - Roman Senate",
+        significance: "Symbolic catalyst for the transition from Republic to Empire."
+      },
+      {
+        id: "denarius-caesar",
+        icon: "🪙",
+        name: "Silver Caesar Denarius",
+        desc: "Minted silver coin bearing the portrait of Dictator Perpetuo Julius Caesar.",
+        origin: "44 BCE - Temple of Juno Moneta",
+        significance: "First Roman coinage to feature a living Roman leader."
+      }
+    ],
+    scenarios: [
+      {
+        id: "warn-caesar",
+        title: "Deliver written warning note to Julius Caesar on March 15",
+        divergence: 89.4,
+        type: "danger",
+        cascade: [
+          "Caesar intercepts the assassination plot and purges the conspirators.",
+          "The Roman Empire launches early expeditions to Northern Europe and Asia.",
+          "Latin remains the undisputed universal global language into the 21st century."
+        ]
+      }
+    ]
+  },
+  {
     id: "renaissance",
     name: "Renaissance Florence",
     shortName: "1503 AD Florence",
@@ -233,6 +283,56 @@ const ERAS_DATA = [
           "The 20th century bypasses fossil fuel dependency completely.",
           "Zero-carbon atmospheric stabilization achieved globally by 1950.",
           "Global warming is averted before it ever began."
+        ]
+      }
+    ]
+  },
+  {
+    id: "apollo",
+    name: "Apollo 11 Tranquility Base",
+    shortName: "1969 AD Moon Landing",
+    badge: "EPOCH: 1969 CE",
+    tagline: "One small step for man, one giant leap for mankind.",
+    year: 1969,
+    displayYear: "1969",
+    month: 6, // July
+    day: 20,
+    era: "AD",
+    climate: "Lunar Vacuum (0 atm)",
+    population: "2 Astronauts on Lunar Surface",
+    tech: "Saturn V Rocketry & AGC Core Rope Memory",
+    hazard: "HIGH ENVIRONMENT (Level 4)",
+    description: "The Eagle lunar module settles into the Sea of Tranquility. Neil Armstrong and Buzz Aldrin deploy the American flag and seismometers while the world watches on black-and-white television screens 384,000 km away.",
+    colorTheme: "#3a86ff",
+    particleTheme: "lunar-dust",
+    artifacts: [
+      {
+        id: "lunar-rock",
+        icon: "🪨",
+        name: "Basalt Lunar Sample #10017",
+        desc: "Volcanic lunar basalt rock containing ilmenite and pyroxene crystallized 3.7 billion years ago.",
+        origin: "1969 CE - Mare Tranquillitatis",
+        significance: "First direct physical planetary material returned from another celestial body."
+      },
+      {
+        id: "apollo-flight-manual",
+        icon: "📋",
+        name: "LM Lunar Surface Checklist",
+        desc: "Laminated checklist used by Apollo astronauts during the historic EVA operations.",
+        origin: "1969 CE - Lunar Module Eagle",
+        significance: "Blueprint of humanity's maiden extraterrestrial expedition."
+      }
+    ],
+    scenarios: [
+      {
+        id: "leave-quantum-satellite",
+        title: "Deploy a deep-space quantum communications relay on lunar south pole",
+        divergence: 74.0,
+        type: "warning",
+        cascade: [
+          "Lunar base is permanently inhabited by 1975.",
+          "Manned Mars landings occur in 1982.",
+          "Orbital manufacturing eliminates heavy terrestrial industrial pollution."
         ]
       }
     ]
@@ -402,7 +502,7 @@ const ERAS_DATA = [
 
 // Helper to look up era by ID or Year
 function getEraById(id) {
-  return ERAS_DATA.find(e => e.id === id) || ERAS_DATA[4]; // default 1985
+  return ERAS_DATA.find(e => e.id === id) || ERAS_DATA[6]; // default 1985 Synthwave
 }
 
 function findClosestEra(year, era) {
